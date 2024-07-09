@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\mg\\Desktop\\API_prof_git\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|c:\\users\\mg\\desktop\\api_prof_git\\apiprof_a\\services\\generateurmotdepasse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|solutionrelative:apiprof_a\\services\\generateurmotdepasse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|c:\\users\\mg\\desktop\\api_prof_git\\apiprof_a\\views\\professeur\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|solutionrelative:apiprof_a\\views\\professeur\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|c:\\users\\mg\\desktop\\api_prof_git\\apiprof_a\\services\\activedirectoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|solutionrelative:apiprof_a\\services\\activedirectoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|c:\\users\\mg\\desktop\\api_prof_git\\apiprof_a\\models\\professeur.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|solutionrelative:apiprof_a\\models\\professeur.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|c:\\users\\mg\\desktop\\api_prof_git\\apiprof_a\\controllers\\professeurcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,27 +31,54 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "GenerateurMotDePasse.cs",
-              "DocumentMoniker": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Services\\GenerateurMotDePasse.cs",
-              "RelativeDocumentMoniker": "ApiProf_A\\Services\\GenerateurMotDePasse.cs",
-              "ToolTip": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Services\\GenerateurMotDePasse.cs",
-              "RelativeToolTip": "ApiProf_A\\Services\\GenerateurMotDePasse.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAQwCoAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-09T15:39:24.016Z",
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Views\\Professeur\\Index.cshtml",
+              "RelativeDocumentMoniker": "ApiProf_A\\Views\\Professeur\\Index.cshtml",
+              "ToolTip": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Views\\Professeur\\Index.cshtml",
+              "RelativeToolTip": "ApiProf_A\\Views\\Professeur\\Index.cshtml",
+              "ViewState": "AQIAADUBAAAAAAAAAAAIwDcBAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-09T18:35:43.771Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "ActiveDirectoryService.cs",
+              "DocumentMoniker": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Services\\ActiveDirectoryService.cs",
+              "RelativeDocumentMoniker": "ApiProf_A\\Services\\ActiveDirectoryService.cs",
+              "ToolTip": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Services\\ActiveDirectoryService.cs",
+              "RelativeToolTip": "ApiProf_A\\Services\\ActiveDirectoryService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-09T18:29:07.119Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Professeur.cs",
+              "DocumentMoniker": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Models\\Professeur.cs",
+              "RelativeDocumentMoniker": "ApiProf_A\\Models\\Professeur.cs",
+              "ToolTip": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Models\\Professeur.cs",
+              "RelativeToolTip": "ApiProf_A\\Models\\Professeur.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-09T18:29:00.988Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "ProfesseurController.cs",
               "DocumentMoniker": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Controllers\\ProfesseurController.cs",
               "RelativeDocumentMoniker": "ApiProf_A\\Controllers\\ProfesseurController.cs",
               "ToolTip": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Controllers\\ProfesseurController.cs",
               "RelativeToolTip": "ApiProf_A\\Controllers\\ProfesseurController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAABcAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-09T15:21:57.698Z"
+              "WhenOpened": "2024-07-09T18:27:24.628Z",
+              "EditorCaption": ""
             }
           ]
         }
