@@ -1,12 +1,54 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\mg\\Desktop\\API_prof\\",
-  "Documents": [],
+  "WorkspaceRootPath": "C:\\Users\\mg\\Desktop\\API_prof_git\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|c:\\users\\mg\\desktop\\api_prof_git\\apiprof_a\\services\\generateurmotdepasse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|solutionrelative:apiprof_a\\services\\generateurmotdepasse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|c:\\users\\mg\\desktop\\api_prof_git\\apiprof_a\\controllers\\professeurcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3ADE29D2-6A02-45AA-ADCF-0C66F28C8E6F}|ApiProf_A\\ApiProf_A.csproj|solutionrelative:apiprof_a\\controllers\\professeurcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GenerateurMotDePasse.cs",
+              "DocumentMoniker": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Services\\GenerateurMotDePasse.cs",
+              "RelativeDocumentMoniker": "ApiProf_A\\Services\\GenerateurMotDePasse.cs",
+              "ToolTip": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Services\\GenerateurMotDePasse.cs",
+              "RelativeToolTip": "ApiProf_A\\Services\\GenerateurMotDePasse.cs",
+              "ViewState": "AQIAAAcAAAAAAAAAAAA1wCoAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-09T15:39:24.016Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ProfesseurController.cs",
+              "DocumentMoniker": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Controllers\\ProfesseurController.cs",
+              "RelativeDocumentMoniker": "ApiProf_A\\Controllers\\ProfesseurController.cs",
+              "ToolTip": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\Controllers\\ProfesseurController.cs",
+              "RelativeToolTip": "ApiProf_A\\Controllers\\ProfesseurController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAABcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-07-09T15:21:57.698Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

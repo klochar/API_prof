@@ -1,0 +1,109 @@
+# Informations de connexion MySQL
+$server = "localhost"
+$user = "root"
+$password = "Password1"
+$database = "api_prof_db"
+
+# Chemin du fichier de sortie pour enregistrer les comptes créés
+$outputFile = "C:\Users\Administrateur\Desktop\output.txt"
+
+# Query pour récupérer les données des professeurs
+$query = "SELECT idprof, prenomProf, nomProf, departement FROM prof;"
+
+# Chaîne de commande MySQL pour récupérer les résultats
+$mysqlCommand = @"
+mysql -h $server -u $user -p$password -D $database -e "$query"
+"@
+
+# Exécuter la commande MySQL depuis PowerShell et récupérer les résultats
+$results = Invoke-Expression -Command $mysqlCommand
+
+# Importer le module Active Directory pour gérer les utilisateurs
+Import-Module ActiveDirectory
+
+# Fonction pour générer un mot de passe avec le préfixe "Tecc"
+function Generate-Password {
+    $Prefix = "Tecc"
+    $Symbols = @('!', '@', '#', '$', '%', '^', '&', '*')
+
+    # Générer quatre chiffres aléatoires
+    $quatreNumRandom = Generate-RandomNumbers
+
+    # Choisir un symbole aléatoire
+    $symbol = Generate-RandomSymbol
+
+    # Placer le symbole avant ou après les chiffres aléatoires
+    $motDePasseSansPrefix = Place-SymbolBeforeOrAfterNumbers $quatreNumRandom $symbol
+
+    # Construire le mot de passe final
+    $mdpFinal = $Prefix + $motDePasseSansPrefix
+
+    return $mdpFinal
+}
+
+# Fonction pour générer quatre chiffres aléatoires sous forme de chaîne
+function Generate-RandomNumbers {
+    $random = New-Object System.Random
+    $numbers = [string]($random.Next(10000) % 10000)  # Génère un nombre aléatoire entre 0000 et 9999
+    return $numbers.PadLeft(4, '0')  # Remplir avec des zéros à gauche si nécessaire pour avoir exactement quatre chiffres
+}
+
+# Fonction pour générer un symbole aléatoire
+function Generate-RandomSymbol {
+    $Symbols = @('!', '@', '#', '$', '%', '^', '&', '*')
+    $random = New-Object System.Random
+    $index = $random.Next($Symbols.Length)
+    return $Symbols[$index]
+}
+
+# Fonction pour placer le symbole avant ou après les chiffres
+function Place-SymbolBeforeOrAfterNumbers {
+    param(
+        [string]$quatreNumRandom,
+        [string]$symbol
+    )
+
+    $random = New-Object System.Random
+    $k = $random.Next(2) -eq 0  # $true or $false
+
+    if ($k) {
+        return "$symbol$quatreNumRandom"
+    } else {
+        return "$quatreNumRandom$symbol"
+    }
+}
+
+# Tableau pour stocker les informations des comptes créés
+$accountsInfo = @()
+
+# Pour chaque résultat (professeur), créer un utilisateur dans Active Directory
+foreach ($result in $results) {
+    $idProf = $result.idprof
+    $prenomProf = $result.prenomProf
+    $nomProf = $result.nomProf
+    $departement = $result.departement
+
+    # Générer le nom d'utilisateur et le mot de passe
+    $username = "$prenomProf.$nomProf"
+    $password = Generate-Password
+
+    # Création de l'utilisateur dans Active Directory
+    New-ADUser -Name "$prenomProf $nomProf" `
+               -GivenName $prenomProf `
+               -Surname $nomProf `
+               -SamAccountName $username `
+               -UserPrincipalName "$username@domain.local" `
+               -AccountPassword (ConvertTo-SecureString $password -AsPlainText -Force) `
+               -Enabled $true `
+               -Path "OU=_PROFS,DC=domain,DC=local"
+
+    # Ajouter les informations du compte au tableau
+    $accountInfo = "Utilisateur : $username | Mot de passe : $password"
+    $accountsInfo += $accountInfo
+}
+
+# Écrire les informations des comptes créés dans un fichier texte
+$accountsInfo | Out-File -FilePath $outputFile -Encoding UTF8
+
+# Afficher un message de confirmation
+Write-Host "Les informations des comptes créés ont été enregistrées dans : $outputFile"
