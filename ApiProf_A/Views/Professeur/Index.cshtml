@@ -1,0 +1,326 @@
+﻿@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter Professeur</title>
+</head>
+<body>
+    <h2>Ajouter un Professeur</h2>
+    <form id="professorForm">
+
+        <label for="idProf">Identifiant:</label>
+        <input type="text" id="idProf"  pattern="[0-9]+" title="Entrez uniquement des chiffres" placeholder="Entrez identifiant du prof" required ><br><br>
+
+        <label for="prenomProf">Prénom:</label>
+        <input type="text" id="prenomProf" placeholder="Entrez prenom du prof" required><br><br>
+
+        <label for="nomProf">Nom:</label>
+        <input type="text" id="nomProf" placeholder="Entrez nom du prof" required><br><br>
+
+        <label for="departement">Département:</label>
+        <input type="text" id="departement" placeholder="Entrez departement du prof" required><br><br>
+
+        <button type="submit" >Ajouter Professeur Liste tempoiraire</button>
+
+    </form>
+    
+
+    <h2>Liste des Professeurs</h2>
+    <ul id="listeProfesseurs">
+        <!-- partie local -->
+       
+    </ul>
+    <div>
+        <button type="button" onclick="enregistrerProfesseurs()">Enregistrer Dans La Base de Donnee</button>
+        <button type="button" onclick="supprimerTousProf()">supprimer TOUT De la liste temporaire</button>
+        <button type="button" onclick="exporterProfesseurs()">Exporter liste Temporaire</button>
+    </div>
+        
+    
+    <div id="professeurs"> 
+        <!-- partie base de donnee -->
+        <h2>Professeurs enregistrés sur la bd:api_prof_db TABLE: PROF </h2>
+        <div>
+            <button type="button" onclick="voirProfesseurs()">Voir Professeurs enregistrés Dans la Base de donne</button>
+        </div>
+    </div>
+    
+    
+    <script>
+        
+        let professeurs = []; // type professeur
+        //voirProfesseurs();
+        document.getElementById('professorForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var prenom = document.getElementById('prenomProf').value;
+            var nom = document.getElementById('nomProf').value;
+            var id = document.getElementById('idProf').value;
+            var departement = document.getElementById('departement').value;
+
+            if (prenom && nom && id && departement) {
+                ajouterProfesseur(prenom,nom,id,departement); 
+            } else {
+                alert('Veuillez remplir tous les champs');
+            }
+        });
+
+        function ajouterProfesseur(prenom,nom,id,departement) {
+           @* const prenom = document.getElementById('prenomProf').value;
+            const nom = document.getElementById('nomProf').value;
+            const id = document.getElementById('idProf').value;
+            const departement = document.getElementById('departement').value;*@
+
+            const professeur = {
+                prenomProf: prenom,
+                nomProf: nom,
+                idProf: id,
+                departement: departement
+            };
+
+            professeurs.push(professeur);
+            document.getElementById('prenomProf').value = '';
+            document.getElementById('nomProf').value = '';
+            document.getElementById('idProf').value = '';
+            document.getElementById('departement').value = '';
+            afficherListeProfesseurs();
+        }
+
+        async function supprimerTousProf() {//deleteTableau LOCAL ET NON BD
+            try {
+                const response = await fetch('/api/professeur/deleteTableau', {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la suppression des professeurs.');
+                }
+
+                alert('Tous les professeurs ont été supprimés avec succès!');
+                professeurs = [];
+                afficherListeProfesseurs();
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue lors de la suppression des professeurs.');
+            }
+        }
+
+        @*async function afficherListeProfesseurs() {
+            const liste = document.getElementById('listeProfesseurs');
+            liste.innerHTML = '';
+
+            professeurs.forEach((professeur, index) => {
+                const item = document.createElement('li');
+                item.textContent = `Identidiant du prof : ${professeur.idProf} Prenom: ${professeur.prenomProf} Nom: ${professeur.nomProf} Dep: ${professeur.departement}`;
+                liste.appendChild(item);
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Supprimer';
+                deleteButton.addEventListener('click', () => {
+                    supprimerProfesseur(index);
+                });
+                item.appendChild(deleteButton);
+            });
+        }*@
+
+        async function afficherListeProfesseurs() {
+            const liste = document.getElementById('listeProfesseurs');
+            liste.innerHTML = '';
+
+            professeurs.forEach((professeur, index) => {
+                const item = document.createElement('li');
+                item.innerHTML = `<strong>Identifiant du prof :</strong> ${professeur.idProf} 
+                          <strong>Prénom :</strong> ${professeur.prenomProf} 
+                          <strong>Nom :</strong> ${professeur.nomProf} 
+                          <strong>Département :</strong> ${professeur.departement}`;
+
+                liste.appendChild(item);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Supprimer';
+                deleteButton.style.marginLeft = '25px';
+                deleteButton.addEventListener('click', () => {
+                    supprimerProfesseur(index);
+                });
+                item.appendChild(deleteButton);
+            });
+        }
+
+        function supprimerProfesseur(index) { 
+            professeurs.splice(index, 1);
+            afficherListeProfesseurs(professeurs);
+        }
+
+        async function enregistrerProfesseurs() {
+            //verif tabl non vide
+            if(professeurs.length==0){
+                alert('tableau vide');//ici ca peut bloquer ?? je suis pas sur 
+                return;
+            }
+            try {
+                const response = await fetch('/api/professeur/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(professeurs)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de l\'enregistrement des professeurs.');
+                }
+
+                alert('Professeurs enregistrés avec succès!');
+                voirProfesseurs();
+                professeurs = [];//vider
+                afficherListeProfesseurs();
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue lors de l\'enregistrement des professeurs.');
+            }
+        }
+        async function exporterProfesseurs() {
+            try {
+                const response = await fetch('/api/professeur/export', {
+                    method: 'GET'
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de l\'exportation des professeurs.');
+                }
+
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'Professeurs.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue lors de l\'exportation des professeurs.');
+            }
+        }
+
+        async function voirProfesseurs() {
+            let professeurs = [];
+            try {
+                const response = await fetch('/api/professeur/liste', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des professeurs depuis la base de données.');
+                }
+
+                professeurs = await response.json();
+                const professeursContainer = document.getElementById('professeurs');
+                //faut faire promise sinon professeurs ne sera pas encore a jour, car asynchrone et lignes en bas exexcute en premier
+                let html = '<h2>Professeurs enregistrés sur la bd:api_prof_db TABLE: PROF </h2>';
+                html += '<ul>';
+                professeurs.forEach(professeur => {
+                    html += `<li><strong>id:</strong> ${professeur.idProf} <strong>prenom:</strong> ${professeur.prenomProf} <strong>nom:</strong> ${professeur.nomProf} <strong>dep:</strong> ${professeur.departement}</li> <button onclick="supprimerProfesseurBaseDonne('${professeur.idProf}')">Supprimer</button></li>`;
+                });
+                html += '</ul>';
+
+                await new Promise(resolve => {
+                    setTimeout(() => {
+                        professeursContainer.innerHTML = html;
+                        resolve(); 
+                    }, 100);
+                });
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue lors de la récupération des professeurs depuis la base de données.');
+            }
+        }
+
+        async function supprimerProfesseurBaseDonne(idProfesseur) {
+            try {
+                const response = await fetch(`/api/professeur/${idProfesseur}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la suppression du professeur.');
+                }   
+                //pr repaint
+                voirProfesseurs();
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                alert('Une erreur est survenue lors de la suppression du professeur.');
+            }
+        }
+
+
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h2 {
+            color: #444;
+            margin-bottom: 15px;
+        }
+        
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        #professeurs {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        #professeurs h2 {
+            color: #555;
+            margin-bottom: 15px;
+        }
+    </style>
+</body>
+</html>
