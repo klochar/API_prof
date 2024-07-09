@@ -5,18 +5,24 @@ $password = "Password1"
 $database = "api_prof_db"
 
 # Chemin du fichier de sortie pour enregistrer les comptes créés
-$outputFile = "C:\Users\Administrateur\Desktop\output.txt"
+$outputFileCreated = "C:\Users\Administrateur\Desktop\output.txt"
+
+# Chemin du fichier pour enregistrer les résultats
+$outputFileAD = "C:\Users\Administrateur\Desktop\prof_results.txt"
 
 # Query pour récupérer les données des professeurs
 $query = "SELECT idprof, prenomProf, nomProf, departement FROM prof;"
 
 # Chaîne de commande MySQL pour récupérer les résultats
 $mysqlCommand = @"
-mysql -h $server -u $user -p$password -D $database -e "$query"
+mysql -h $server -u $user -p$password -D $database -e "$query" -B > $outputFileAD
 "@
 
 # Exécuter la commande MySQL depuis PowerShell et récupérer les résultats
-$results = Invoke-Expression -Command $mysqlCommand
+Invoke-Expression -Command $mysqlCommand
+
+# Lire les résultats du fichier texte
+$results = Get-Content -Path $outputFileAD
 
 # Importer le module Active Directory pour gérer les utilisateurs
 Import-Module ActiveDirectory
@@ -77,18 +83,22 @@ function Place-SymbolBeforeOrAfterNumbers {
 $accountsInfo = @()
 
 # Pour chaque résultat (professeur), créer un utilisateur dans Active Directory
-foreach ($result in $results) {
-    $idProf = $result.idprof
-    $prenomProf = $result.prenomProf
-    $nomProf = $result.nomProf
-    $departement = $result.departement
+foreach ($line in $results[1..$($results.Count-1)]) {
+    # Diviser la ligne en champs
+    $fields = $line -split "\t"
+
+    # Récupérer les valeurs des champs
+    $idProf = $fields[0].Trim()
+    $prenomProf = $fields[1].Trim()
+    $nomProf = $fields[2].Trim()
+    $departement = $fields[3].Trim()
 
     # Générer le nom d'utilisateur et le mot de passe
     $username = "$prenomProf.$nomProf"
     $password = Generate-Password
 
     # Création de l'utilisateur dans Active Directory
-    New-ADUser -Name "$prenomProf $nomProf" `
+    New-ADUser -Name $prenomProf `
                -GivenName $prenomProf `
                -Surname $nomProf `
                -SamAccountName $username `
@@ -103,7 +113,7 @@ foreach ($result in $results) {
 }
 
 # Écrire les informations des comptes créés dans un fichier texte
-$accountsInfo | Out-File -FilePath $outputFile -Encoding UTF8
+$accountsInfo | Out-File -FilePath $outputFileCreated -Encoding UTF8
 
 # Afficher un message de confirmation
 Write-Host "Les informations des comptes créés ont été enregistrées dans : $outputFile"
