@@ -1,8 +1,6 @@
 # Informations de connexion MySQL
 $server = "localhost"
 $user = "root"
-$password = "Password1"
-$database = "api_prof_db"
 
 # Chemin du fichier de sortie pour enregistrer les comptes créés
 $outputFileCreated = "C:\Users\Administrateur\Desktop\output.txt"
@@ -15,9 +13,8 @@ $query = "SELECT idprof, prenomProf, nomProf, departement FROM prof;"
 
 # Chaîne de commande MySQL pour récupérer les résultats
 $mysqlCommand = @"
-mysql -h $server -u $user -p$password -D $database -e "$query" -B > $outputFileAD
+mysql --defaults-file="C:\Users\Administrateur\Desktop\my.cnf" -h $server -D $database -e "$query" -B > $outputFileAD
 "@
-
 # Exécuter la commande MySQL depuis PowerShell et récupérer les résultats
 Invoke-Expression -Command $mysqlCommand
 
@@ -89,12 +86,12 @@ foreach ($line in $results[1..$($results.Count-1)]) {
 
     # Récupérer les valeurs des champs
     $idProf = $fields[0].Trim()
-    $prenomProf = $fields[1].Trim()
-    $nomProf = $fields[2].Trim()
-    $departement = $fields[3].Trim()
+    $prenomProf = $fields[1].Trim().ToLower()
+    $nomProf = $fields[2].Trim().ToLower()
+    $departement = $fields[3].Trim().ToLower()
 
     # Générer le nom d'utilisateur et le mot de passe
-    $username = "$prenomProf.$nomProf"
+    $username = ($prenomProf[0] + $nomProf).ToLower()
     $password = Generate-Password
 
     # Création de l'utilisateur dans Active Directory
@@ -110,10 +107,17 @@ foreach ($line in $results[1..$($results.Count-1)]) {
     # Ajouter les informations du compte au tableau
     $accountInfo = "Utilisateur : $username | Mot de passe : $password"
     $accountsInfo += $accountInfo
+
+    # Supprimer l'entrée correspondante dans la table MySQL
+    $deleteQuery = "DELETE FROM prof WHERE true;"
+    $mysqlDeleteCommand = @"
+    mysql --defaults-file="C:\Users\Administrateur\Desktop\my.cnf" -h $server -D $database -e "$deleteQuery" 
+"@
+    Invoke-Expression -Command $mysqlDeleteCommand
 }
 
 # Écrire les informations des comptes créés dans un fichier texte
 $accountsInfo | Out-File -FilePath $outputFileCreated -Encoding UTF8
 
 # Afficher un message de confirmation
-Write-Host "Les informations des comptes créés ont été enregistrées dans : $outputFile"
+Write-Host "Les informations des comptes créés ont été enregistrées dans : $outputFileCreated"
