@@ -1,4 +1,4 @@
-# Informations de connexion MySQL
+﻿# Informations de connexion MySQL
 $server = "localhost"
 $user = "root"
 
@@ -10,6 +10,8 @@ $outputFileAD = "C:\Users\Administrateur\Desktop\prof_results.txt"
 
 # Query pour récupérer les données des professeurs
 $query = "SELECT idprof, prenomProf, nomProf, departement FROM prof;"
+
+$database = "api_prof_db"
 
 # Chaîne de commande MySQL pour récupérer les résultats
 $mysqlCommand = @"
