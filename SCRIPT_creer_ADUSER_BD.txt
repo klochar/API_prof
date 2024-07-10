@@ -1,59 +1,81 @@
-﻿# Informations de connexion MySQL
+﻿# connexion mysql, my.cnf dans Administrateur pour auth
 $server = "localhost"
-$user = "root"
-
-# Chemin du fichier de sortie pour enregistrer les comptes créés
-$outputFileCreated = "C:\Users\Administrateur\Desktop\output.txt"
-
-# Chemin du fichier pour enregistrer les résultats
-$outputFileAD = "C:\Users\Administrateur\Desktop\prof_results.txt"
-
-# Query pour récupérer les données des professeurs
-$query = "SELECT idprof, prenomProf, nomProf, departement FROM prof;"
-
 $database = "api_prof_db"
 
-# Chaîne de commande MySQL pour récupérer les résultats
-$mysqlCommand = @"
-mysql --defaults-file="C:\Users\Administrateur\Desktop\my.cnf" -h $server -D $database -e "$query" -B > $outputFileAD
+$outputFileName = "output_creation_compte_profAD_$(Get-Date -Format 'yyyy-MM-dd_HH:mm').txt"
+
+# fichier sortie avec les utilisatuer et leur mot de passe genere
+$outputFileCreated = "C:\Users\Administrateur\Desktop\$outputFileName"
+
+# fichier sortie avec les profs trouve dans la base de donne
+$outputFileAD = "C:\Users\Administrateur\Desktop\prof_results.txt"
+
+# check cmb de prof dans la table
+$checkQuery = "SELECT COUNT(*) FROM prof;"
+
+# auth comamnde sql
+$mysqlCheckCommand = @"
+mysql --defaults-file="C:\Users\Administrateur\my.cnf" -h $server -D $database -e "$checkQuery" -B > $outputFileAD
 "@
-# Exécuter la commande MySQL depuis PowerShell et récupérer les résultats
+
+# execute commande pr check
+Invoke-Expression -Command $mysqlCheckCommand
+
+# nb ligne dans table prof et ecris dans ouputFileAD
+$count = Get-Content -Path $outputFileAD -TotalCount 1
+$count = [int]$count
+
+# si table est vide
+if ($count -eq 0) {
+    Write-Host "table prof vite, arret script"
+    exit
+}
+
+# sfw prof 
+$query = "SELECT idprof, prenomProf, nomProf, departement FROM prof;"
+
+
+# commande auth
+$mysqlCommand = @"
+mysql --defaults-file="C:\Users\Administrateur\my.cnf" -h $server -D $database -e "$query" -B > $outputFileAD
+"@
+# execute commande
 Invoke-Expression -Command $mysqlCommand
 
-# Lire les résultats du fichier texte
+# get content dans le fichier ad (ecrase celui avant)
 $results = Get-Content -Path $outputFileAD
 
-# Importer le module Active Directory pour gérer les utilisateurs
+# module AD
 Import-Module ActiveDirectory
 
-# Fonction pour générer un mot de passe avec le préfixe "Tecc"
+# generataion mdp avec Tecc
 function Generate-Password {
     $Prefix = "Tecc"
     $Symbols = @('!', '@', '#', '$', '%', '^', '&', '*')
 
-    # Générer quatre chiffres aléatoires
+    # 4 chiffres
     $quatreNumRandom = Generate-RandomNumbers
 
-    # Choisir un symbole aléatoire
+    # symbole aleatoire
     $symbol = Generate-RandomSymbol
 
-    # Placer le symbole avant ou après les chiffres aléatoires
+    # placemen avant ou apres 4 chiffres
     $motDePasseSansPrefix = Place-SymbolBeforeOrAfterNumbers $quatreNumRandom $symbol
 
-    # Construire le mot de passe final
+    # mdp final
     $mdpFinal = $Prefix + $motDePasseSansPrefix
 
     return $mdpFinal
 }
 
-# Fonction pour générer quatre chiffres aléatoires sous forme de chaîne
+# 4 chiffres 
 function Generate-RandomNumbers {
     $random = New-Object System.Random
-    $numbers = [string]($random.Next(10000) % 10000)  # Génère un nombre aléatoire entre 0000 et 9999
-    return $numbers.PadLeft(4, '0')  # Remplir avec des zéros à gauche si nécessaire pour avoir exactement quatre chiffres
+    $numbers = [string]($random.Next(10000) % 10000) 
+    return $numbers.PadLeft(4, '0')  
 }
 
-# Fonction pour générer un symbole aléatoire
+# symbole random
 function Generate-RandomSymbol {
     $Symbols = @('!', '@', '#', '$', '%', '^', '&', '*')
     $random = New-Object System.Random
@@ -61,7 +83,7 @@ function Generate-RandomSymbol {
     return $Symbols[$index]
 }
 
-# Fonction pour placer le symbole avant ou après les chiffres
+# apres ou avant
 function Place-SymbolBeforeOrAfterNumbers {
     param(
         [string]$quatreNumRandom,
@@ -69,7 +91,7 @@ function Place-SymbolBeforeOrAfterNumbers {
     )
 
     $random = New-Object System.Random
-    $k = $random.Next(2) -eq 0  # $true or $false
+    $k = $random.Next(2) -eq 0  
 
     if ($k) {
         return "$symbol$quatreNumRandom"
@@ -78,25 +100,21 @@ function Place-SymbolBeforeOrAfterNumbers {
     }
 }
 
-# Tableau pour stocker les informations des comptes créés
+#sstock info compte cree
 $accountsInfo = @()
 
-# Pour chaque résultat (professeur), créer un utilisateur dans Active Directory
+# chauqe prof, on cree un ADprof et on enleve premiere ligne, sera les champs
 foreach ($line in $results[1..$($results.Count-1)]) {
-    # Diviser la ligne en champs
     $fields = $line -split "\t"
 
-    # Récupérer les valeurs des champs
     $idProf = $fields[0].Trim()
     $prenomProf = $fields[1].Trim().ToLower()
     $nomProf = $fields[2].Trim().ToLower()
     $departement = $fields[3].Trim().ToLower()
 
-    # Générer le nom d'utilisateur et le mot de passe
     $username = ($prenomProf[0] + $nomProf).ToLower()
     $password = Generate-Password
 
-    # Création de l'utilisateur dans Active Directory
     New-ADUser -Name $prenomProf `
                -GivenName $prenomProf `
                -Surname $nomProf `
@@ -106,20 +124,18 @@ foreach ($line in $results[1..$($results.Count-1)]) {
                -Enabled $true `
                -Path "OU=_PROFS,DC=domain,DC=local"
 
-    # Ajouter les informations du compte au tableau
+    #dans le tableau pr le mettre dans output
     $accountInfo = "Utilisateur : $username | Mot de passe : $password"
     $accountsInfo += $accountInfo
 
-    # Supprimer l'entrée correspondante dans la table MySQL
+    # finir par supprimer ce qu il se trouve dans la db
     $deleteQuery = "DELETE FROM prof WHERE true;"
     $mysqlDeleteCommand = @"
-    mysql --defaults-file="C:\Users\Administrateur\Desktop\my.cnf" -h $server -D $database -e "$deleteQuery" 
+    mysql --defaults-file="C:\Users\Administrateur\my.cnf" -h $server -D $database -e "$deleteQuery" 
 "@
     Invoke-Expression -Command $mysqlDeleteCommand
 }
 
-# Écrire les informations des comptes créés dans un fichier texte
+# dans le output avec le tableau
 $accountsInfo | Out-File -FilePath $outputFileCreated -Encoding UTF8
-
-# Afficher un message de confirmation
 Write-Host "Les informations des comptes créés ont été enregistrées dans : $outputFileCreated"

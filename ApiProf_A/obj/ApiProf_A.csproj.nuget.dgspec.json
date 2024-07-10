@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Administrateur\\Desktop\\API_prof\\ApiProf_A\\ApiProf_A.csproj": {}
+    "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\ApiProf_A.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Administrateur\\Desktop\\API_prof\\ApiProf_A\\ApiProf_A.csproj": {
+    "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\ApiProf_A.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Administrateur\\Desktop\\API_prof\\ApiProf_A\\ApiProf_A.csproj",
+        "projectUniqueName": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\ApiProf_A.csproj",
         "projectName": "ApiProf_A",
-        "projectPath": "C:\\Users\\Administrateur\\Desktop\\API_prof\\ApiProf_A\\ApiProf_A.csproj",
-        "packagesPath": "C:\\Users\\Administrateur\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Administrateur\\Desktop\\API_prof\\ApiProf_A\\obj\\",
+        "projectPath": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\ApiProf_A.csproj",
+        "packagesPath": "C:\\Users\\mg\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mg\\Desktop\\API_prof_git\\ApiProf_A\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Administrateur\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mg\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -104,7 +104,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
