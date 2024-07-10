@@ -23,7 +23,7 @@ namespace ApiProf_A.Controllers
             _configuration = configuration;
         }
 
-        [HttpPost("upload")]
+        [HttpPost("upload")] ///api/professeur/upload
         public IActionResult Upload([FromBody] List<Professeur> professeurs)
         {
             if (professeurs == null)
@@ -54,7 +54,7 @@ namespace ApiProf_A.Controllers
         }
 
 
-        [HttpGet("export")]
+        [HttpGet("export")] ///api/professeur/export
         public IActionResult Export()
         {
             var fileContents = _excelService.GenerateExcel(_professeurs);
